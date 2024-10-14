@@ -1,10 +1,9 @@
-// Function to capture user input and send it to Django for processing
 function getResponse() {
     const userInput = document.getElementById('user-input').value;
     if (userInput) {
         printMessage(userInput, 'user');
         document.getElementById('user-input').value = '';
-        
+
         fetch('/search/', {
             method: 'POST',
             headers: {
@@ -15,10 +14,18 @@ function getResponse() {
         })
         .then(response => response.json())
         .then(data => {
-            const assistantResponse = data.result;
-            printMessage(assistantResponse, 'assistant');
+            if (data.success) {
+                const assistantResponse = data.result;
+                printMessage(assistantResponse, 'assistant');
+                displayImages(data.image_url); // Display image results if available
+            } else {
+                printMessage(data.result, 'assistant');  // Show error message
+            }
         })
-        .catch(error => console.error('Error:', error));
+        .catch(error => {
+            console.error('Error:', error);
+            printMessage("Something went wrong, please try again.", 'assistant');
+        });
     }
 }
 
@@ -45,9 +52,9 @@ function startVoiceRecognition() {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'X-CSRFToken': getCSRFToken(),  // Include CSRF token
+                'X-CSRFToken': getCSRFToken(),
             },
-            body: JSON.stringify({ query: transcript }) // Fixed from userInput to transcript
+            body: JSON.stringify({ query: transcript })
         })
         .then(response => response.json())
         .then(data => {
@@ -85,4 +92,20 @@ function printMessage(message, sender) {
     messageDiv.textContent = message;
     conversationDiv.appendChild(messageDiv);
     conversationDiv.scrollTop = conversationDiv.scrollHeight; // Scroll to the bottom
+}
+
+function displayImages(imageUrl) {
+    const imageContainer = document.getElementById('image-results');
+    imageContainer.innerHTML = '';  // Clear previous images
+    if (imageUrl) {
+        const imgElement = document.createElement('img');
+        imgElement.src = imageUrl;
+        imgElement.alt = 'Image result';
+        imgElement.style.width = '300px';  // Set a fixed size for images
+        imageContainer.appendChild(imgElement);
+    } else {
+        const noImageMessage = document.createElement('div');
+        noImageMessage.textContent = "No images found.";
+        imageContainer.appendChild(noImageMessage);
+    }
 }

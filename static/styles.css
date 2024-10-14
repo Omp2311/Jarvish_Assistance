@@ -1,5 +1,5 @@
 body {
-    font-family: Comic Neue, cursive;
+    font-family: 'Comic Neue', cursive;
     margin: 0;
     padding: 0;
     background: url('https://th.bing.com/th/id/OIP.iQi9y16sonYzapIsqPkiawHaDt?rs=1&pid=ImgDetMain') no-repeat center center fixed;
@@ -9,6 +9,7 @@ body {
     align-items: center;
     height: 100vh;
     text-align: center;
+    color: white;
 }
 
 .container {
@@ -20,18 +21,20 @@ body {
     width: 90%;
     display: flex;
     flex-direction: column;
-    margin-top: 20px; /* Center the search box higher on the page */
+    margin-top: 20px;
     padding: 1rem;
+    font-size: 1.1rem;
 }
 
 header {
     background-color: #18226c;
     color: white;
-    padding: 1rem;
+    padding: 1.5rem;
     font-size: 2rem;
     display: flex;
     justify-content: center;
     align-items: center;
+    border-radius: 10px;
 }
 
 .main {
@@ -42,11 +45,12 @@ header {
     padding-bottom: 1rem;
 }
 
-.input-container {
+.top-section {
     display: flex;
     justify-content: center;
-    margin-top: 1rem;
-    margin-bottom: 1rem;
+    align-items: center;
+    margin-bottom: 20px;
+    width: 100%;
 }
 
 input[type="text"] {
@@ -56,6 +60,11 @@ input[type="text"] {
     border-radius: 5px 0 0 5px;
     outline: none;
     font-size: 1rem;
+    transition: border-color 0.3s ease-in-out;
+}
+
+input[type="text"]:focus {
+    border-color: #18226c;
 }
 
 button {
@@ -67,14 +76,14 @@ button {
     border-radius: 0 5px 5px 0;
     outline: none;
     font-size: 1rem;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s, transform 0.2s ease-in-out;
 }
 
 button:hover {
-    background-color: #18226c;
+    background-color: #18376d;
+    transform: scale(1.05);
 }
 
-/* Styles for the microphone icon */
 #mic {
     background-color: #18226c;
     border: none;
@@ -85,10 +94,12 @@ button:hover {
     margin-left: 10px;
     font-size: 1.5rem;
     outline: none;
+    transition: background-color 0.3s, transform 0.2s ease-in-out;
 }
 
 #mic:hover {
-    background-color: #18226c;
+    background-color: #18376d;
+    transform: scale(1.1);
 }
 
 #conversation {
@@ -98,7 +109,7 @@ button:hover {
     overflow-y: auto;
     display: flex;
     flex-direction: column;
-    align-items: flex-start; /* Align all messages to the left */
+    align-items: flex-start;
 }
 
 .message {
@@ -109,24 +120,25 @@ button:hover {
     max-width: 80%;
 }
 
-.message.user {
-    color: white;
-    background-color: #18226c;
-    text-align: right;
+.user {
+    background-color: #daf2fe;
     align-self: flex-end;
+    border-radius: 20px 20px 0 20px;
 }
 
-.message.assistant {
-    color: #333;
-    background-color: #e0e0e0;
-    text-align: left;
+.assistant {
+    background-color: #f1f1f1;
     align-self: flex-start;
+    border-radius: 20px 20px 20px 0;
 }
 
-/* Style for the top container holding input and mic */
-.top-section {
+#image-results {
+    margin-top: 20px;
     display: flex;
     justify-content: center;
-    align-items: center;
-    margin-bottom: 20px;
+}
+
+#image-results img {
+    margin-top: 20px;
+    border-radius: 10px;
 }
