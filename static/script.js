@@ -1,9 +1,11 @@
+// Function to handle the user input and get the response
 function getResponse() {
     const userInput = document.getElementById('user-input').value;
     if (userInput) {
-        printMessage(userInput, 'user');
+        printMessage(userInput, 'user');  // Show user input
         document.getElementById('user-input').value = '';
 
+        // Send POST request to the server with the query
         fetch('/search/', {
             method: 'POST',
             headers: {
@@ -15,11 +17,17 @@ function getResponse() {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                const assistantResponse = data.result;
-                printMessage(assistantResponse, 'assistant');
-                displayImages(data.image_url); // Display image results if available
+                // Check if it's an image-only result
+                if (data.image_url) {
+                    // Display the image and no text
+                    displayImages(data.image_url);
+                } else {
+                    // Otherwise, display the assistant's response (text result)
+                    const assistantResponse = data.result;
+                    printMessage(assistantResponse, 'assistant');
+                }
             } else {
-                printMessage(data.result, 'assistant');  // Show error message
+                printMessage(data.result, 'assistant');  // Error message
             }
         })
         .catch(error => {
@@ -29,25 +37,26 @@ function getResponse() {
     }
 }
 
-// Function to start voice recognition and send the result to Django
+// Function to start the voice recognition
 function startVoiceRecognition() {
     const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-    recognition.lang = 'en-in';
+    recognition.lang = 'en-in';  // Set the recognition language
 
     recognition.onstart = function() {
         console.log('Voice recognition started. Try speaking into the microphone.');
-    }
+    };
 
     recognition.onspeechend = function() {
         console.log('You were quiet for a while, so voice recognition stopped.');
-        recognition.stop();
-    }
+        recognition.stop();  // Stop recognition if there's no speech
+    };
 
     recognition.onresult = function(event) {
+        // Get the transcript of what the user said
         const transcript = event.results[0][0].transcript;
-        printMessage(transcript, 'user');
-        
-        // Send the transcript to Django for processing
+        printMessage(transcript, 'user');  // Display the user's spoken input
+
+        // Send the transcript to the server via POST request
         fetch('/search/', {
             method: 'POST',
             headers: {
@@ -58,17 +67,33 @@ function startVoiceRecognition() {
         })
         .then(response => response.json())
         .then(data => {
-            const assistantResponse = data.result;
-            printMessage(assistantResponse, 'assistant');
+            if (data.success) {
+                const assistantResponse = data.result;
+
+                // Display the assistant's response (text result)
+                if (assistantResponse) {
+                    printMessage(assistantResponse, 'assistant');
+                }
+
+                // If an image URL is returned, display the image
+                if (data.image_url) {
+                    displayImages(data.image_url);
+                }
+            } else {
+                printMessage(data.result || "No response received.", 'assistant');
+            }
         })
-        .catch(error => console.error('Error:', error));
-        
+        .catch(error => {
+            console.error('Error:', error);
+            printMessage("Something went wrong, please try again.", 'assistant');
+        });
     };
 
+    // Start voice recognition
     recognition.start();
 }
 
-// Function to get CSRF token for AJAX calls
+// Function to get CSRF token from the browser's cookies
 function getCSRFToken() {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
@@ -84,28 +109,31 @@ function getCSRFToken() {
     return cookieValue;
 }
 
-// Function to print messages to the conversation div
+// Function to display messages in the conversation history
 function printMessage(message, sender) {
     const conversationDiv = document.getElementById('conversation');
     const messageDiv = document.createElement('div');
     messageDiv.classList.add(sender);  // 'user' or 'assistant'
     messageDiv.textContent = message;
     conversationDiv.appendChild(messageDiv);
-    conversationDiv.scrollTop = conversationDiv.scrollHeight; // Scroll to the bottom
-}
 
+    // Smooth scroll to the bottom after adding new messages
+    conversationDiv.scrollTo({
+        top: conversationDiv.scrollHeight,
+        behavior: 'smooth'
+    });
+}
+function appendImages(imageUrl) {
+    const imageContainer = document.getElementById('image-results');
+    const image = document.createElement('img');
+    image.src = imageUrl;
+    imageContainer.appendChild(image); // Append the new image without replacing the old ones
+}
+// Function to display images returned from the assistant
 function displayImages(imageUrl) {
     const imageContainer = document.getElementById('image-results');
+    const image = document.createElement('img');
+    image.src = imageUrl;
     imageContainer.innerHTML = '';  // Clear previous images
-    if (imageUrl) {
-        const imgElement = document.createElement('img');
-        imgElement.src = imageUrl;
-        imgElement.alt = 'Image result';
-        imgElement.style.width = '300px';  // Set a fixed size for images
-        imageContainer.appendChild(imgElement);
-    } else {
-        const noImageMessage = document.createElement('div');
-        noImageMessage.textContent = "No images found.";
-        imageContainer.appendChild(noImageMessage);
-    }
+    imageContainer.appendChild(image);
 }

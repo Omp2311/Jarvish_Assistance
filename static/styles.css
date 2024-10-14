@@ -13,8 +13,8 @@ body {
 }
 
 .container {
-    background-color: rgba(255, 255, 255, 0.85);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    background-color: rgba(0, 0, 0, 0.7);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     border-radius: 20px;
     overflow: hidden;
     max-width: 600px;
@@ -24,6 +24,7 @@ body {
     margin-top: 20px;
     padding: 1rem;
     font-size: 1.1rem;
+    color: white;
 }
 
 header {
@@ -37,23 +38,9 @@ header {
     border-radius: 10px;
 }
 
-.main {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    flex: 1;
-    padding-bottom: 1rem;
-}
-
-.top-section {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 20px;
-    width: 100%;
-}
-
 input[type="text"] {
+    background-color: rgba(255, 255, 255, 0.9);
+    color: black;
     padding: 0.8rem;
     flex: 1;
     border: 1px solid #ccc;
@@ -64,7 +51,7 @@ input[type="text"] {
 }
 
 input[type="text"]:focus {
-    border-color: #18226c;
+    border-color: #6c1818;
 }
 
 button {
@@ -79,29 +66,6 @@ button {
     transition: background-color 0.3s, transform 0.2s ease-in-out;
 }
 
-button:hover {
-    background-color: #18376d;
-    transform: scale(1.05);
-}
-
-#mic {
-    background-color: #18226c;
-    border: none;
-    color: white;
-    padding: 0.8rem;
-    border-radius: 50%;
-    cursor: pointer;
-    margin-left: 10px;
-    font-size: 1.5rem;
-    outline: none;
-    transition: background-color 0.3s, transform 0.2s ease-in-out;
-}
-
-#mic:hover {
-    background-color: #18376d;
-    transform: scale(1.1);
-}
-
 #conversation {
     border-top: 1px solid #ccc;
     padding-top: 1rem;
@@ -110,6 +74,8 @@ button:hover {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: white;
 }
 
 .message {
@@ -121,24 +87,28 @@ button:hover {
 }
 
 .user {
-    background-color: #daf2fe;
+    background-color: rgba(58, 170, 240, 0.9);
+    color: white;
     align-self: flex-end;
     border-radius: 20px 20px 0 20px;
 }
 
 .assistant {
-    background-color: #f1f1f1;
+    background-color: rgba(241, 241, 241, 0.8);
+    color: black;
     align-self: flex-start;
     border-radius: 20px 20px 20px 0;
 }
 
 #image-results {
     margin-top: 20px;
-    display: flex;
-    justify-content: center;
+    text-align: center;
+    width: 50%;
 }
 
 #image-results img {
-    margin-top: 20px;
+    max-width: 50%;
+    height: 20;
     border-radius: 10px;
+    margin-top: 50px;
 }
