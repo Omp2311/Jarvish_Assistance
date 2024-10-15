@@ -20,7 +20,7 @@ function getResponse() {
                 // Check if it's an image-only result
                 if (data.image_url) {
                     // Display the image and no text
-                    displayImages(data.image_url);
+                    displayImageInConversation(data.image_url);
                 } else {
                     // Otherwise, display the assistant's response (text result)
                     const assistantResponse = data.result;
@@ -77,7 +77,7 @@ function startVoiceRecognition() {
 
                 // If an image URL is returned, display the image
                 if (data.image_url) {
-                    displayImages(data.image_url);
+                    displayImageInConversation(data.image_url);
                 }
             } else {
                 printMessage(data.result || "No response received.", 'assistant');
@@ -123,17 +123,22 @@ function printMessage(message, sender) {
         behavior: 'smooth'
     });
 }
-function appendImages(imageUrl) {
-    const imageContainer = document.getElementById('image-results');
-    const image = document.createElement('img');
-    image.src = imageUrl;
-    imageContainer.appendChild(image); // Append the new image without replacing the old ones
-}
-// Function to display images returned from the assistant
-function displayImages(imageUrl) {
-    const imageContainer = document.getElementById('image-results');
-    const image = document.createElement('img');
-    image.src = imageUrl;
-    imageContainer.innerHTML = '';  // Clear previous images
-    imageContainer.appendChild(image);
+
+// Function to display images in the conversation history
+function displayImageInConversation(imageUrl) {
+    const conversationDiv = document.getElementById('conversation');
+    const imageDiv = document.createElement('div');
+    imageDiv.classList.add('message', 'assistant');  // Assistant message with image
+    const img = document.createElement('img');
+    img.src = imageUrl;
+    img.alt = "Assistant's Image";
+    img.style.maxWidth = '100%';  // Make sure the image fits within the container
+    imageDiv.appendChild(img);
+    conversationDiv.appendChild(imageDiv);
+
+    // Smooth scroll to the bottom after adding new messages
+    conversationDiv.scrollTo({
+        top: conversationDiv.scrollHeight,
+        behavior: 'smooth'
+    });
 }

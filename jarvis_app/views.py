@@ -110,10 +110,9 @@ def search(request):
             # Otherwise, perform the GPT-2 response or Google text search as before
             gpt2_response, _ = generate_gpt2_response(query)
             google_text_data = google_search(query, search_type="text")  # Optional: Fallback text search for non-image queries
-            say(google_text_data)
             # Combine Google text result and GPT-2 response
             result_text = google_text_data.get('text_result', '') + "\n" + gpt2_response if google_text_data else gpt2_response
-
+            say(result_text)
             # Return the generated result
             return JsonResponse({"success": True, "result": result_text})
         except json.JSONDecodeError:

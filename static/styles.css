@@ -25,6 +25,7 @@ body {
     padding: 1rem;
     font-size: 1.1rem;
     color: white;
+    height: 80vh;  /* Adjust container height to fit the screen */
 }
 
 header {
@@ -69,13 +70,14 @@ button {
 #conversation {
     border-top: 1px solid #ccc;
     padding-top: 1rem;
-    max-height: 300px;
     overflow-y: auto;
+    flex-grow: 1;  /* Allow conversation area to grow and fill available space */
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     background-color: rgba(255, 255, 255, 0.2);
     color: white;
+    max-height: calc(100vh - 50px); /* Ensures conversation area doesn’t overflow */
 }
 
 .message {
@@ -84,6 +86,7 @@ button {
     border-radius: 20px;
     display: inline-block;
     max-width: 80%;
+    word-wrap: break-word;
 }
 
 .user {
@@ -100,15 +103,17 @@ button {
     border-radius: 20px 20px 20px 0;
 }
 
-#image-results {
-    margin-top: 20px;
-    text-align: center;
-    width: 50%;
+#conversation img {
+    max-width: 100%; /* Ensure images don't overflow */
+    height: 200px;
+    border-radius: 2px;
+    margin-top: 10px;
+    display: inline-block;
+    max-width: 100%; /* To prevent image from overflowing */
+    margin-left: 10px;
 }
 
-#image-results img {
-    max-width: 50%;
-    height: 20;
-    border-radius: 10px;
-    margin-top: 50px;
+/* Optional: Add smooth scrolling behavior */
+#conversation {
+    scroll-behavior: smooth;
 }
