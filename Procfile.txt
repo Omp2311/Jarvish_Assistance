@@ -1,0 +1,1 @@
+web: gunicorn Jarvis_website.wsgi --log-file -
