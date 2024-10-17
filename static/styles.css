@@ -16,16 +16,16 @@ body {
     background-color: rgba(0, 0, 0, 0.7);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     border-radius: 20px;
-    overflow: hidden;
-    max-width: 600px;
-    width: 90%;
+    overflow: hidden; /* Ensure overflow is handled */
+    max-width: 100%;
+    width: 100%;
     display: flex;
     flex-direction: column;
     margin-top: 20px;
     padding: 1rem;
     font-size: 1.1rem;
     color: white;
-    height: 80vh;  /* Adjust container height to fit the screen */
+    min-height: 100vh; /* Ensure full viewport height */
 }
 
 header {
@@ -37,6 +37,20 @@ header {
     justify-content: center;
     align-items: center;
     border-radius: 10px;
+}
+
+.main {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.top-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+    width: 100%;
 }
 
 input[type="text"] {
@@ -67,25 +81,33 @@ button {
     transition: background-color 0.3s, transform 0.2s ease-in-out;
 }
 
+button:hover {
+    background-color: #6c1818;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+/* Style for the conversation box */
 #conversation {
     border-top: 1px solid #ccc;
     padding-top: 1rem;
-    overflow-y: auto;
-    flex-grow: 1;  /* Allow conversation area to grow and fill available space */
+    overflow-y: auto; /* Enables vertical scrolling */
+    max-height: 70vh; /* Limits the max height to prevent overflowing the screen */
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     background-color: rgba(255, 255, 255, 0.2);
     color: white;
-    max-height: calc(100vh - 50px); /* Ensures conversation area doesn’t overflow */
+    padding-bottom: 1rem;
+    scroll-behavior: smooth; /* Smooth scroll for transitions */
 }
 
+/* Styling for messages */
 .message {
     margin: 0.5rem 0;
     padding: 0.5rem 1rem;
-    border-radius: 20px;
+    border-radius: 10px;
     display: inline-block;
-    max-width: 80%;
+    max-width: 100%;
     word-wrap: break-word;
 }
 
@@ -103,17 +125,13 @@ button {
     border-radius: 20px 20px 20px 0;
 }
 
+/* Optional styling for the conversation container */
 #conversation img {
-    max-width: 100%; /* Ensure images don't overflow */
-    height: 200px;
+    max-width: 100%;
+    max-height: 300px; /* Set a max height for images */
+    height: auto;
     border-radius: 2px;
     margin-top: 10px;
     display: inline-block;
-    max-width: 100%; /* To prevent image from overflowing */
     margin-left: 10px;
-}
-
-/* Optional: Add smooth scrolling behavior */
-#conversation {
-    scroll-behavior: smooth;
 }
