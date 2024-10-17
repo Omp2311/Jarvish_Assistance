@@ -1,0 +1,16 @@
+Metadata-Version: 2.1
+Name: LinearRegression
+Version: 0.0.1
+Summary: Linear Regression From Scratch
+Home-page: UNKNOWN
+Author: Karthi Prasad
+Author-email: Teamoctaholix@gmail.com
+License: MIT
+Platform: UNKNOWN
+Description-Content-Type: text/markdown
+License-File: LICENSE.txt
+
+This is an Linear Regression ML algorithm developed from scratch
+
+it contains fit, predict and Testing R2 test
+
