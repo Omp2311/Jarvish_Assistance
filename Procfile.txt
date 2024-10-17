@@ -1,1 +1,1 @@
-web: gunicorn Jarvis_website.wsgi --log-file -
+web: gunicorn Jarvish_Assistance.wsgi
