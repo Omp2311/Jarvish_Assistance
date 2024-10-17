@@ -1,0 +1,119 @@
+body {
+    font-family: 'Comic Neue', cursive;
+    margin: 0;
+    padding: 0;
+    background: url('https://th.bing.com/th/id/OIP.iQi9y16sonYzapIsqPkiawHaDt?rs=1&pid=ImgDetMain') no-repeat center center fixed;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    text-align: center;
+    color: white;
+}
+
+.container {
+    background-color: rgba(0, 0, 0, 0.7);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    border-radius: 20px;
+    overflow: hidden;
+    max-width: 600px;
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+    padding: 1rem;
+    font-size: 1.1rem;
+    color: white;
+    height: 80vh;  /* Adjust container height to fit the screen */
+}
+
+header {
+    background-color: #18226c;
+    color: white;
+    padding: 1.5rem;
+    font-size: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+}
+
+input[type="text"] {
+    background-color: rgba(255, 255, 255, 0.9);
+    color: black;
+    padding: 0.8rem;
+    flex: 1;
+    border: 1px solid #ccc;
+    border-radius: 5px 0 0 5px;
+    outline: none;
+    font-size: 1rem;
+    transition: border-color 0.3s ease-in-out;
+}
+
+input[type="text"]:focus {
+    border-color: #6c1818;
+}
+
+button {
+    padding: 0.8rem 1rem;
+    border: none;
+    background-color: #18226c;
+    color: white;
+    cursor: pointer;
+    border-radius: 0 5px 5px 0;
+    outline: none;
+    font-size: 1rem;
+    transition: background-color 0.3s, transform 0.2s ease-in-out;
+}
+
+#conversation {
+    border-top: 1px solid #ccc;
+    padding-top: 1rem;
+    overflow-y: auto;
+    flex-grow: 1;  /* Allow conversation area to grow and fill available space */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: white;
+    max-height: calc(100vh - 50px); /* Ensures conversation area doesn’t overflow */
+}
+
+.message {
+    margin: 0.5rem 0;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    display: inline-block;
+    max-width: 80%;
+    word-wrap: break-word;
+}
+
+.user {
+    background-color: rgba(58, 170, 240, 0.9);
+    color: white;
+    align-self: flex-end;
+    border-radius: 20px 20px 0 20px;
+}
+
+.assistant {
+    background-color: rgba(241, 241, 241, 0.8);
+    color: black;
+    align-self: flex-start;
+    border-radius: 20px 20px 20px 0;
+}
+
+#conversation img {
+    max-width: 100%; /* Ensure images don't overflow */
+    height: 200px;
+    border-radius: 2px;
+    margin-top: 10px;
+    display: inline-block;
+    max-width: 100%; /* To prevent image from overflowing */
+    margin-left: 10px;
+}
+
+/* Optional: Add smooth scrolling behavior */
+#conversation {
+    scroll-behavior: smooth;
+}
