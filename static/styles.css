@@ -7,25 +7,25 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 100vh;
+    height: 100vh; /* Full height for viewport */
     text-align: center;
     color: white;
 }
 
 .container {
     background-color: rgba(0, 0, 0, 0.7);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    box-shadow: transparent;
     border-radius: 20px;
-    overflow: hidden; /* Ensure overflow is handled */
+    overflow: hidden; /* Ensures content is clipped if overflowing */
     max-width: 100%;
-    width: 100%;
+    width: 45%;
     display: flex;
     flex-direction: column;
     margin-top: 20px;
     padding: 1rem;
     font-size: 1.1rem;
     color: white;
-    min-height: 100vh; /* Ensure full viewport height */
+    min-height: 100vh; /* Full viewport height for the container */
 }
 
 header {
@@ -83,29 +83,28 @@ button {
 
 button:hover {
     background-color: #6c1818;
-    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 /* Style for the conversation box */
 #conversation {
-    border-top: 1px solid #ccc;
-    padding-top: 1rem;
+    border-top: 0.5px solid #ccc;
+    padding-top: 0.5rem;
     overflow-y: auto; /* Enables vertical scrolling */
-    max-height: 70vh; /* Limits the max height to prevent overflowing the screen */
+    max-height: 65vh; /* Set a limit to the height */
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     background-color: rgba(255, 255, 255, 0.2);
     color: white;
-    padding-bottom: 1rem;
+    padding-bottom: 0.5rem;
     scroll-behavior: smooth; /* Smooth scroll for transitions */
 }
 
 /* Styling for messages */
 .message {
-    margin: 0.5rem 0;
-    padding: 0.5rem 1rem;
-    border-radius: 10px;
+    margin: 0.5rem ;
+    padding: 3px 9px;
+    border-radius: 2px;
     display: inline-block;
     max-width: 100%;
     word-wrap: break-word;
@@ -128,10 +127,10 @@ button:hover {
 /* Optional styling for the conversation container */
 #conversation img {
     max-width: 100%;
-    max-height: 300px; /* Set a max height for images */
+    max-height: 100px; /* Set a max height for images */
     height: auto;
     border-radius: 2px;
-    margin-top: 10px;
+    margin-top: 2px;
     display: inline-block;
-    margin-left: 10px;
+    margin-left: 2px;
 }
