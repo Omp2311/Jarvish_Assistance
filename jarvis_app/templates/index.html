@@ -10,6 +10,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -19,19 +20,16 @@
             <form method="POST" id="jarvis-form">
                 {% csrf_token %}
                 <div class="top-section">
-                    <!-- User input field for typing queries -->
                     <input type="text" id="user-input" placeholder="Type your query..." />
-                    <!-- Button to trigger search functionality -->
                     <button type="button" onclick="getResponse()">Search</button>
-                    <!-- Button for starting voice recognition -->
                     <button type="button" id="mic" onclick="startVoiceRecognition()">🎤</button>
                 </div>
             </form>
-            <!-- Display the conversation history and results between user and assistant -->
             <div id="conversation">
-                
-                
                 <!-- New messages will be appended here dynamically -->
+            </div>
+            <div class="download-section">
+                <button type="button" onclick="downloadPDF()">Download Conversation as PDF</button>
             </div>
         </main>
     </div>

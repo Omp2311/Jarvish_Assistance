@@ -1,3 +1,4 @@
+import threading
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -15,9 +16,9 @@ logger = logging.getLogger(__name__)
 model_name = 'gpt2'
 tokenizer = GPT2Tokenizer.from_pretrained(model_name)
 model = GPT2LMHeadModel.from_pretrained(model_name)
-model.config.pad_token_id = model.config.eos_token_id  # Set pad_token_id to eos_token_id for open-ended generation
+model.config.pad_token_id = model.config.eos_token_id 
 
-# Google Search API initialization
+# Google Search API 
 api_key = 'AIzaSyD9vvGIXueQKfg0jinIWrO05VT7_ApXGag'
 cse_id = 'd418baac4dcc34ace'
 
@@ -76,7 +77,7 @@ def generate_gpt2_response(query):
     )
     
     response = tokenizer.decode(output[0], skip_special_tokens=True)
-    # Handle edge cases (e.g., short or unclear responses)
+    # Handle edge cases (e.g: short or unclear responses)
     response = handle_edge_cases(response)
     # Save the query and result in the database for future reference
     SearchQuery.objects.create(query=query, result=response)
@@ -93,18 +94,24 @@ def search(request):
         try:
             data = json.loads(request.body)
             query = data.get('query', '').strip().lower()  # Convert to lowercase for consistency
-            logger.debug(f"Received query: {query}")
             say(query)
+            logger.debug(f"Received query: {query}")
 
             if not query:
                 return JsonResponse({"success": False, "result": "Search query cannot be empty."})
+
+            # Function to speak the text asynchronously
+            def speak_async(text):
+                threading.Thread(target=say, args=(text,)).start()
 
             # If the query requests an image, perform an image-only search
             if "image" in query or "photo" in query or "pic" in query:
                 image_data = google_search(query, search_type="image")  # Use the modified image search function
                 if image_data:
+                    speak_async(image_data['image_url'])
                     return JsonResponse({"success": True, "image_url": image_data['image_url']})
                 else:
+                    speak_async("No image found.")
                     return JsonResponse({"success": False, "result": "No image found."})
 
             # Otherwise, perform the GPT-2 response or Google text search as before
@@ -112,7 +119,10 @@ def search(request):
             google_text_data = google_search(query, search_type="text")  # Optional: Fallback text search for non-image queries
             # Combine Google text result and GPT-2 response
             result_text = google_text_data.get('text_result', '') + "\n" + gpt2_response if google_text_data else gpt2_response
-            say(result_text)
+            
+            # Speak the result asynchronously
+            speak_async(result_text)
+            
             # Return the generated result
             return JsonResponse({"success": True, "result": result_text})
         except json.JSONDecodeError:

@@ -98,16 +98,19 @@ button:hover {
     color: white;
     padding-bottom: 0.5rem;
     scroll-behavior: smooth; /* Smooth scroll for transitions */
+    word-wrap: break-word; /* Prevent overflow */
+    word-break: break-word; /* Ensure long words break properly */
 }
 
 /* Styling for messages */
 .message {
-    margin: 0.5rem ;
+    margin: 0.5rem;
     padding: 3px 9px;
     border-radius: 2px;
     display: inline-block;
     max-width: 100%;
-    word-wrap: break-word;
+    word-wrap: break-word; /* Ensures words are wrapped */
+    word-break: break-word; /* Prevents word overflow */
 }
 
 .user {
@@ -133,4 +136,34 @@ button:hover {
     margin-top: 2px;
     display: inline-block;
     margin-left: 2px;
+}
+
+/* Print styles */
+@media print {
+    body {
+        font-size: 12pt; /* Adjust font size for printing */
+        color: black; /* Ensure the text is black on paper */
+    }
+
+    .container {
+        width: 100%; /* Ensure the container takes up the full width */
+        height: auto;
+        padding: 20px; /* Add padding for better layout */
+        font-size: 1rem;
+    }
+
+    header {
+        font-size: 1.5rem; /* Make header smaller for print */
+        padding: 1rem;
+    }
+
+    #conversation {
+        max-height: none; /* Remove the max-height for printing */
+        padding-bottom: 0.5rem;
+    }
+
+    /* Prevent any image overflow */
+    #conversation img {
+        max-height: 100px;
+    }
 }

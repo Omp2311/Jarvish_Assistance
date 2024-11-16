@@ -1,8 +1,8 @@
-// Function to handle the user input and get the response
+// Handle user input and get the response
 function getResponse() {
     const userInput = document.getElementById('user-input').value;
     if (userInput) {
-        printMessage(userInput, 'user');  // Show user input
+        printMessage(userInput, 'user'); // Show user input
         document.getElementById('user-input').value = '';
 
         // Send POST request to the server with the query
@@ -17,17 +17,13 @@ function getResponse() {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                // Check if it's an image-only result
                 if (data.image_url) {
-                    // Display the image and no text
                     displayImageInConversation(data.image_url);
                 } else {
-                    // Otherwise, display the assistant's response (text result)
-                    const assistantResponse = data.result;
-                    printMessage(assistantResponse, 'assistant');
+                    printMessage(data.result, 'assistant');
                 }
             } else {
-                printMessage(data.result, 'assistant');  // Error message
+                printMessage(data.result, 'assistant');
             }
         })
         .catch(error => {
@@ -37,26 +33,22 @@ function getResponse() {
     }
 }
 
-// Function to start the voice recognition
+// Start voice recognition
 function startVoiceRecognition() {
     const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-    recognition.lang = 'en-in';  // Set the recognition language
+    recognition.lang = 'en-in';
 
-    recognition.onstart = function() {
-        console.log('Voice recognition started. Try speaking into the microphone.');
+    recognition.onstart = function () {
+        console.log('Voice recognition started.');
     };
 
-    recognition.onspeechend = function() {
-        console.log('You were quiet for a while, so voice recognition stopped.');
-        recognition.stop();  // Stop recognition if there's no speech
+    recognition.onspeechend = function () {
+        recognition.stop();
     };
 
-    recognition.onresult = function(event) {
-        // Get the transcript of what the user said
+    recognition.onresult = function (event) {
         const transcript = event.results[0][0].transcript;
-        printMessage(transcript, 'user');  // Display the user's spoken input
-
-        // Send the transcript to the server via POST request
+        printMessage(transcript, 'user');
         fetch('/search/', {
             method: 'POST',
             headers: {
@@ -68,19 +60,12 @@ function startVoiceRecognition() {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                const assistantResponse = data.result;
-
-                // Display the assistant's response (text result)
-                if (assistantResponse) {
-                    printMessage(assistantResponse, 'assistant');
-                }
-
-                // If an image URL is returned, display the image
+                printMessage(data.result, 'assistant');
                 if (data.image_url) {
                     displayImageInConversation(data.image_url);
                 }
             } else {
-                printMessage(data.result || "No response received.", 'assistant');
+                printMessage(data.result, 'assistant');
             }
         })
         .catch(error => {
@@ -89,18 +74,17 @@ function startVoiceRecognition() {
         });
     };
 
-    // Start voice recognition
     recognition.start();
 }
 
-// Function to get CSRF token from the browser's cookies
+// Get CSRF token from cookies
 function getCSRFToken() {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
         const cookies = document.cookie.split(';');
         for (let i = 0; i < cookies.length; i++) {
             const cookie = cookies[i].trim();
-            if (cookie.substring(0, "csrftoken".length + 1) === ("csrftoken" + '=')) {
+            if (cookie.substring(0, "csrftoken".length + 1) === "csrftoken=") {
                 cookieValue = decodeURIComponent(cookie.substring("csrftoken".length + 1));
                 break;
             }
@@ -109,36 +93,71 @@ function getCSRFToken() {
     return cookieValue;
 }
 
-// Function to display messages in the conversation history
+// Display messages in the conversation
 function printMessage(message, sender) {
     const conversationDiv = document.getElementById('conversation');
     const messageDiv = document.createElement('div');
-    messageDiv.classList.add(sender);  // 'user' or 'assistant'
+    messageDiv.classList.add(sender);
     messageDiv.textContent = message;
     conversationDiv.appendChild(messageDiv);
-
-    // Smooth scroll to the bottom after adding new messages
     conversationDiv.scrollTo({
         top: conversationDiv.scrollHeight,
-        behavior: 'smooth'
+        behavior: 'smooth',
     });
 }
 
-// Function to display images in the conversation history
+// Display images in the conversation
 function displayImageInConversation(imageUrl) {
     const conversationDiv = document.getElementById('conversation');
     const imageDiv = document.createElement('div');
-    imageDiv.classList.add('message', 'assistant');  // Assistant message with image
     const img = document.createElement('img');
     img.src = imageUrl;
     img.alt = "Assistant's Image";
-    img.style.maxWidth = '100%';  // Make sure the image fits within the container
+    img.style.maxWidth = '100%';
     imageDiv.appendChild(img);
     conversationDiv.appendChild(imageDiv);
-
-    // Smooth scroll to the bottom after adding new messages
     conversationDiv.scrollTo({
         top: conversationDiv.scrollHeight,
-        behavior: 'smooth'
+        behavior: 'smooth',
     });
+}
+
+// Download conversation as PDF
+function downloadPDF() {
+    const conversationDiv = document.getElementById('conversation');
+    const messages = conversationDiv.querySelectorAll('div');
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    let yPosition = 10;
+
+    // Maximum page height for pdf is around 280 units, keeping space for header and margins
+    const maxHeight = 280;
+    
+    // Loop through each message and add it to the PDF
+    messages.forEach((message) => {
+        const text = message.textContent.trim();
+        if (text) {
+            const sender = message.classList.contains('user') ? 'User: ' : 'Assistant: ';
+            const fullText = sender + text;
+
+            // Split the text into lines to prevent overflow
+            const lines = doc.splitTextToSize(fullText, 180); // Adjust line width to fit page
+
+            // Check if adding this line will exceed the max height of the page
+            if (yPosition + lines.length * 10 > maxHeight) { // Adding lines with padding
+                doc.addPage();
+                yPosition = 10; // Reset y position for the new page
+            }
+
+            // Add text lines to the PDF
+            lines.forEach((line, index) => {
+                doc.text(line, 10, yPosition + index * 10); 
+            });
+
+            yPosition += lines.length * 10 + 5; // Adding space between messages
+        }
+    });
+
+    // Save the PDF
+    doc.save('conversation.pdf');
 }
